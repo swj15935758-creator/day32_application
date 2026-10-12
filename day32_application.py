@@ -45,14 +45,8 @@ def main():
     )
 
     preview_col, save_col = st.columns(2)
-
-    preview_clicked = preview_col.button(
-        '계산 미리보기'
-    )
-
-    save_clicked = save_col.button(
-        'DB 저장'
-    )
+    preview_clicked = preview_col.button('계산 미리보기')
+    save_clicked = save_col.button('DB 저장')
 
     if preview_clicked:
         try:
@@ -86,24 +80,10 @@ def main():
 
         c1, c2, c3 = st.columns(3)
 
-        c1.metric(
-            '수입',
-            f'{preview_result["income"]:,}원'
-        )
-
-        c2.metric(
-            '지출',
-            f'{preview_result["expense"]:,}원'
-        )
-
-        c3.metric(
-            '예상 잔액',
-            f'{preview_result["balance"]:,}원'
-        )
-
-        st.caption(
-            f'요청 키: {request_key}'
-        )
+        c1.metric('수입',f'{preview_result["income"]:,}원')
+        c2.metric('지출',f'{preview_result["expense"]:,}원')
+        c3.metric('예상 잔액',f'{preview_result["balance"]:,}원')
+        st.caption(f'요청 키: {request_key}')
 
     if save_clicked:
         if preview_result is None:
@@ -120,56 +100,36 @@ def main():
                 )
 
                 if record_id is None:
-                    st.info(
-                        '같은 요청 키가 이미 저장되어 있습니다.'
-                    )
+                    st.info('같은 요청 키가 이미 저장되어 있습니다.')
 
                 else:
-                    st.success(
-                        f'저장 완료 ID: {record_id}'
-                    )
+                    st.success(f'저장 완료 ID: {record_id}')
 
             except ValueError as ve:
                 st.warning(str(ve))
 
             except psycopg.Error as pe:
-                st.error(
-                    'DB 저장에 실패했습니다.'
-                )
+                st.error('DB 저장에 실패했습니다.')
                 st.error(str(pe))
 
     st.subheader('전체 통계')
 
     try:
         stats = summary()
-
         stat1, stat2 = st.columns(2)
-
-        stat1.metric(
-            '전체 계획 건수',
-            stats['total_count']
-        )
-
-        stat2.metric(
-            '전체 잔액 합계',
-            f'{stats["total_balance"]:,}원'
-        )
+        stat1.metric('전체 계획 건수',stats['total_count'])
+        stat2.metric('전체 잔액 합계',f'{stats["total_balance"]:,}원')
 
     except ValueError as ve:
         st.warning(str(ve))
 
     except psycopg.Error as pe:
-        st.error(
-            'DB 조회에 실패했습니다.'
-        )
+        st.error('DB 조회에 실패했습니다.')
         st.error(str(pe))
 
     st.subheader('계획 목록')
 
-    keyword = st.text_input(
-        '계획 제목 검색',
-        max_chars=80
-    )
+    keyword = st.text_input('계획 제목 검색',max_chars=80)
 
     try:
         rows = list_plans(keyword)
@@ -182,18 +142,13 @@ def main():
             )
 
         else:
-            st.info(
-                '조회된 계획이 없습니다.'
-            )
+            st.info('조회된 계획이 없습니다.')
 
     except ValueError as ve:
         st.warning(str(ve))
 
     except psycopg.Error as pe:
-        st.error(
-            'DB 조회에 실패했습니다.'
-        )
-        st.error(str(pe))
+        st.error('DB 조회에 실패했습니다.')st.error(str(pe))
 
     st.subheader('ID별 상세 조회')
 
@@ -206,25 +161,18 @@ def main():
 
     if st.button('상세 조회'):
         try:
-            record = get_plan(
-                int(record_id)
-            )
+            record = get_plan(int(record_id))
 
             if record:
                 st.write(record)
-
             else:
-                st.info(
-                    '해당 ID의 계획이 없습니다.'
-                )
+                st.info('해당 ID의 계획이 없습니다.')
 
         except ValueError as ve:
             st.warning(str(ve))
 
         except psycopg.Error as pe:
-            st.error(
-                'DB 조회에 실패했습니다.'
-            )
+            st.error('DB 조회에 실패했습니다.')
             st.error(str(pe))
 
 
