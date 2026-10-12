@@ -148,7 +148,8 @@ def main():
         st.warning(str(ve))
 
     except psycopg.Error as pe:
-        st.error('DB 조회에 실패했습니다.')st.error(str(pe))
+        st.error('DB 조회에 실패했습니다.')
+        st.error(str(pe))
 
     st.subheader('ID별 상세 조회')
 
