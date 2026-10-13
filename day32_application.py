@@ -87,9 +87,7 @@ def main():
 
     if save_clicked:
         if preview_result is None:
-            st.warning(
-                '먼저 계산 미리보기를 실행하세요.'
-            )
+            st.warning('먼저 계산 미리보기를 실행하세요.')
 
         else:
             try:
